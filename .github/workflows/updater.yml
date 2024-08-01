@@ -4,7 +4,7 @@ name: GitHub Actions Version Updater
 on:
   push:
     branches:
-      - entrypoint  
+      - main  
     tags:
       - '*'
   schedule:
