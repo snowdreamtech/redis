@@ -4,14 +4,78 @@
 
 Docker Image packaging for Redis. (amd64, arm32v6, arm32v7, arm64v8, i386, ppc64le,riscv64, s390x)
 
-# Run
+# Usage
+
+To help you get started creating a container from this image you can either use docker-compose or the docker cli.
+
+## Docker Cli
+
+### Simple
 
 ```bash
-docker run --rm snowdreamtech/redis:latest
+docker run -d \
+  --name=redis \
+  -e TZ=Etc/UTC \
+  -e REDIS_PASS=admin \
+  -p 6379:6379 \
+  -v /path/to/data:/var/lib/redis \
+  --restart unless-stopped \
+  snowdreamtech/redis:latest
 ```
 
+### Advance
+
 ```bash
-docker run -e TZ=Asia/Shanghai --rm snowdreamtech/redis:latest
+docker run -d \
+  --name=redis \
+  -e TZ=Etc/UTC \
+  -e REDIS_PASS=admin \
+  -e REDIS_PORT=6379 \
+  -p 6379:6379 \
+  -v /path/to/data:/var/lib/redis \
+  --restart unless-stopped \
+  snowdreamtech/redis:latest
+```
+
+## Docker Compose
+
+### Simple
+
+```bash
+version: "3"
+
+services:
+  redis:
+    image: snowdreamtech/redis:latest
+    container_name: redis
+    environment:
+      - TZ=Etc/UTC
+      - REDIS_PASS=admin
+    volumes:
+      - /path/to/data:/var/lib/redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
+```
+
+### Advance
+
+```bash
+version: "3"
+
+services:
+  redis:
+    image: snowdreamtech/redis:latest
+    container_name: redis
+    environment:
+      - TZ=Etc/UTC
+      - REDIS_PASS=admin
+      - REDIS_PORT=6379
+    volumes:
+      - /path/to/data:/var/lib/redis
+    ports:
+      - 6379:6379
+    restart: unless-stopped
 ```
 
 # Development
