@@ -1,18 +1,18 @@
-FROM alpine:3.20.2
+FROM snowdreamtech/alpine:7.2.5
 
 LABEL maintainer="snowdream <sn0wdr1am@qq.com>"
 
-RUN echo "@main https://dl-cdn.alpinelinux.org/alpine/edge/main" | tee -a /etc/apk/repositories \
-    && echo "@community https://dl-cdn.alpinelinux.org/alpine/edge/community" | tee -a /etc/apk/repositories \
-    && echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" | tee -a /etc/apk/repositories \
-    && apk add --no-cache musl-locales \
-    musl-locales-lang \
-    tzdata \
-    openssl \
-    wget \
-    ca-certificates \                                                                                                                                                                                                      
-    && update-ca-certificates
+ENV REDIS_PORT=6379 \
+    REDIS_PASS="" 
+
+RUN apk add --no-cache redis=7.2.5-r0
+
+COPY redis.conf /etc/redis.conf
 
 COPY docker-entrypoint.sh /usr/local/bin/
 
+EXPOSE 6379
+
 ENTRYPOINT ["docker-entrypoint.sh"]
+
+CMD ["redis-server", "/etc/redis.conf"]
