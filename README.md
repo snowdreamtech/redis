@@ -17,6 +17,7 @@ docker run -d \
   --name=redis \
   -e TZ=Etc/UTC \
   -e REDIS_PASS=admin \
+  -e DISALLOW_USER_LOGIN_REMOTELY=0 \
   -p 6379:6379 \
   -v /path/to/data:/var/lib/redis \
   --restart unless-stopped \
@@ -30,6 +31,7 @@ docker run -d \
   --name=redis \
   -e TZ=Etc/UTC \
   -e REDIS_PASS=admin \
+  -e DISALLOW_USER_LOGIN_REMOTELY=0 \
   -e REDIS_PORT=6379 \
   -p 6379:6379 \
   -v /path/to/data:/var/lib/redis \
@@ -51,6 +53,7 @@ services:
     environment:
       - TZ=Etc/UTC
       - REDIS_PASS=admin
+      - DISALLOW_USER_LOGIN_REMOTELY=0 
     volumes:
       - /path/to/data:/var/lib/redis
     ports:
@@ -70,6 +73,7 @@ services:
     environment:
       - TZ=Etc/UTC
       - REDIS_PASS=admin
+      - DISALLOW_USER_LOGIN_REMOTELY=0 
       - REDIS_PORT=6379
     volumes:
       - /path/to/data:/var/lib/redis

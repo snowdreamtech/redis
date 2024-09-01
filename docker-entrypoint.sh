@@ -10,8 +10,16 @@ fi
 
 # set REDIS_PASS
 if [ -n "${REDIS_PASS}" ]; then
-    sed -i "s|# requirepass.*|requirepass ${REDIS_PASS}|g" ${REDIS_CONFIG_PATH}
+    sed -i "s|#*\s*requirepass.*|requirepass ${REDIS_PASS}|g" ${REDIS_CONFIG_PATH}
 fi
+
+# set DISALLOW_USER_LOGIN_REMOTELY
+if [ "${DISALLOW_USER_LOGIN_REMOTELY}" == 1 ]; then
+    sed -i "s|^bind.*|bind 127.0.0.1 ::1|g" ${REDIS_CONFIG_PATH}
+else 
+    sed -i "s|^bind.*|bind * -::*|g" ${REDIS_CONFIG_PATH}
+fi
+
 
 # exec commands
 exec "$@"
