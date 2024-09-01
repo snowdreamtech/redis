@@ -10,7 +10,7 @@ fi
 
 # set REDIS_PASS
 if [ -n "${REDIS_PASS}" ]; then
-    sed -i "s|#*\s*requirepass.*|requirepass ${REDIS_PASS}|g" ${REDIS_CONFIG_PATH}
+    sed -i "s|#*\s*requirepass\s*foobared|requirepass ${REDIS_PASS}|g" ${REDIS_CONFIG_PATH}
 fi
 
 # set DISALLOW_USER_LOGIN_REMOTELY
