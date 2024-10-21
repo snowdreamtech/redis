@@ -6,7 +6,7 @@ ENV REDIS_PORT=6379 \
     REDIS_PASS="" \
     DISALLOW_USER_LOGIN_REMOTELY=1
 
-RUN apk add --no-cache redis=7.2.5-r0
+RUN apk add --no-cache redis=7.2.5-r1
 
 COPY redis.conf /etc/redis.conf
 
