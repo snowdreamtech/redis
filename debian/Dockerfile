@@ -24,16 +24,22 @@ ENV KEEPALIVE=1 \
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0
 
+ENV REDIS_VERSION=5:7.0.15-1~deb12u2 \
+    REDIS_CONFIG_PATH=/etc/redis/redis.conf \
+    REDIS_PORT=6379 \
+    REDIS_PASS="" \
+    DISALLOW_USER_LOGIN_REMOTELY=1
+
 ARG GID=1000 \
     UID=1000  \
     USER=redis \
-    WORKDIR=/home/redis
+    WORKDIR=/var/lib/redis
 
 # Create a user with UID and GID
 RUN set -eux \
     && if [ "${USER}" != "root" ]; then \
     addgroup --gid ${GID} ${USER}; \
-    adduser --home /home/${USER} --uid ${UID} --gid ${GID} --gecos ${USER} --shell /bin/bash --disabled-password ${USER}; \
+    adduser --home /nonexistent --uid ${UID} --gid ${GID} --gecos ${USER} --shell /bin/bash --disabled-password ${USER}; \
     # sed -i "/%sudo/c ${USER} ALL=(ALL:ALL) NOPASSWD:ALL" /etc/sudoers; \
     fi \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
@@ -58,7 +64,9 @@ RUN set -eux \
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \ 
-    vim \
+    redis=${REDIS_VERSION} \
+    && rm -rf /etc/redis.conf \
+    && find / -name "*redis*" -exec chown -Rv ${USER}:${USER} {} \; \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -70,6 +78,8 @@ USER ${USER}
 
 # Set the workdir
 WORKDIR ${WORKDIR}
+
+EXPOSE 6379
 
 COPY docker-entrypoint.sh /usr/local/bin/
 

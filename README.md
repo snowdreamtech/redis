@@ -15,7 +15,7 @@ To help you get started creating a container from this image you can either use 
 ```bash
 docker run -d \
   --name=redis \
-  -e TZ=Etc/UTC \
+  -e TZ=Asia/Shanghai \
   -e REDIS_PASS=admin \
   -e DISALLOW_USER_LOGIN_REMOTELY=0 \
   -p 6379:6379 \
@@ -29,7 +29,7 @@ docker run -d \
 ```bash
 docker run -d \
   --name=redis \
-  -e TZ=Etc/UTC \
+  -e TZ=Asia/Shanghai \
   -e REDIS_PASS=admin \
   -e DISALLOW_USER_LOGIN_REMOTELY=0 \
   -e REDIS_PORT=6379 \
@@ -51,7 +51,7 @@ services:
     image: snowdreamtech/redis:latest
     container_name: redis
     environment:
-      - TZ=Etc/UTC
+      - TZ=Asia/Shanghai
       - REDIS_PASS=admin
       - DISALLOW_USER_LOGIN_REMOTELY=0 
     volumes:
@@ -71,7 +71,7 @@ services:
     image: snowdreamtech/redis:latest
     container_name: redis
     environment:
-      - TZ=Etc/UTC
+      - TZ=Asia/Shanghai
       - REDIS_PASS=admin
       - DISALLOW_USER_LOGIN_REMOTELY=0 
       - REDIS_PORT=6379
