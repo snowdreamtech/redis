@@ -9,7 +9,7 @@ LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/redis" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="12.8" \
+    org.opencontainers.image.version="7.0.15" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/redis"
     
 # Switch to the user
@@ -24,7 +24,7 @@ ENV KEEPALIVE=1 \
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0
 
-ENV REDIS_VERSION=5:7.0.15-1~deb12u2 \
+ENV REDIS_VERSION=5:7.0.15-1~deb12u3 \
     REDIS_CONFIG_PATH=/etc/redis/redis.conf \
     REDIS_PORT=6379 \
     REDIS_PASS="" \
