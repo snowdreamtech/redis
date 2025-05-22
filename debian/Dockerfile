@@ -24,7 +24,7 @@ ENV KEEPALIVE=1 \
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0
 
-ENV REDIS_VERSION=5:7.0.15-1~deb12u3 \
+ENV REDIS_VERSION=5:7.0.15-1~deb12u4 \
     REDIS_CONFIG_PATH=/etc/redis/redis.conf \
     REDIS_PORT=6379 \
     REDIS_PASS="" \
