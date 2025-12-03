@@ -2,15 +2,15 @@ FROM snowdreamtech/debian:13.1.0
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="Redis Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for Redis on Debian. (i386,amd64,arm32v5,arm32v7,arm64,mips64le,ppc64le,s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/redis" \
+    org.opencontainers.image.base.name="snowdreamtech/redis:debian" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/redis" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="13.1.0" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.version="7.0.15" \
+    org.opencontainers.image.url="https://github.com/snowdreamtech/redis"
 
 # Switch to the user
 USER root
@@ -20,7 +20,7 @@ WORKDIR /root
 
 # keep the docker container running
 ARG DEBIAN_FRONTEND=noninteractive \
-    KEEPALIVE=0 \
+    KEEPALIVE=1 \
     # The cap_net_bind_service capability in Linux allows a process to bind a socket to Internet domain privileged ports, 
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0 \
@@ -50,6 +50,12 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
+ENV REDIS_VERSION=5:7.0.15-1~deb12u4 \
+    REDIS_CONFIG_PATH=/etc/redis/redis.conf \
+    REDIS_PORT=6379 \
+    REDIS_PASS="" \
+    DISALLOW_USER_LOGIN_REMOTELY=1
+
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 ] && [ "${PGID}" -ne 0 ]; then \
     addgroup --gid ${PGID} ${USER}; \
@@ -60,7 +66,8 @@ RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy update  \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \ 
-    vim \
+    redis=${REDIS_VERSION} \
+    && rm -rf /etc/redis.conf \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
@@ -71,6 +78,8 @@ RUN set -eux \
 # RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
 #     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
 #     fi
+
+EXPOSE 6379
 
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 

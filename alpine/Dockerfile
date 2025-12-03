@@ -2,15 +2,15 @@ FROM snowdreamtech/alpine:3.22.2
 
 # OCI annotations to image
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Alpine" \
-    org.opencontainers.image.description="Docker Images for Base on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:alpine" \
+    org.opencontainers.image.title="Redis Image Based On Alpine" \
+    org.opencontainers.image.description="Docker Images for Redis on Alpine. (i386, amd64, arm32v6, arm32v7, arm64, ppc64le,riscv64, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/redis" \
+    org.opencontainers.image.base.name="snowdreamtech/redis:alpine" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/redis" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="3.22.2" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.version="7.2.9" \
+    org.opencontainers.image.url="https://github.com/snowdreamtech/redis"
     
 # Switch to the user
 USER root
@@ -19,7 +19,7 @@ USER root
 WORKDIR /root
 
 # keep the docker container running
-ARG KEEPALIVE=0 \
+ARG KEEPALIVE=1 \
     # The cap_net_bind_service capability in Linux allows a process to bind a socket to Internet domain privileged ports, 
     # which are port numbers less than 1024. 
     CAP_NET_BIND_SERVICE=0 \
@@ -48,6 +48,12 @@ ENV KEEPALIVE=${KEEPALIVE} \
     USER=${USER} \
     WORKDIR=${WORKDIR} 
 
+ENV REDIS_VERSION=7.2.9-r0 \
+    REDIS_CONFIG_PATH=/etc/redis/redis.conf \
+    REDIS_PORT=6379 \
+    REDIS_PASS="" \
+    DISALLOW_USER_LOGIN_REMOTELY=1
+
 # Create a user with PUID and PGID
 RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 ] && [ "${PGID}" -ne 0 ]; then \
     addgroup -g ${PGID} ${USER}; \
@@ -57,12 +63,16 @@ RUN if [ "${USER}" != "root" ] && [ ! -d "/home/${USER}" ] && [ "${PUID}" -ne 0 
 
 RUN apk update \
     && apk add --no-cache \
-    vim
+    redis=${REDIS_VERSION} \
+    && mkdir -p /etc/redis \
+    && mv /etc/redis.conf ${REDIS_CONFIG_PATH}
 
 # Enable CAP_NET_BIND_SERVICE
 # RUN if [ "${USER}" != "root" ] && [ "${CAP_NET_BIND_SERVICE}" -eq 1 ]; then \
     # setcap 'cap_net_bind_service=+ep' `which nginx`; \
     # fi
+
+EXPOSE 6379
 
 COPY entrypoint.d /usr/local/bin/entrypoint.d
 
