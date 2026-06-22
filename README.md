@@ -1,9 +1,9 @@
-# Base
+# Redis
 
-![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/base)
-![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/base/latest)
-![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/base)
-![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/base)
+![Docker Image Version](https://img.shields.io/docker/v/snowdreamtech/redis)
+![Docker Image Size](https://img.shields.io/docker/image-size/snowdreamtech/redis/latest)
+![Docker Pulls](https://img.shields.io/docker/pulls/snowdreamtech/redis)
+![Docker Stars](https://img.shields.io/docker/stars/snowdreamtech/redis)
 
 Docker base template providing standardized container foundations with flexible entrypoint systems, multi-architecture support, and consistent configuration patterns across Alpine, Debian, and Rocky Linux distributions.
 
@@ -22,8 +22,8 @@ The Docker base template serves as a foundational starting point for building co
 
 ```bash
 # Pull and run the default Debian variant
-docker pull snowdreamtech/base:debian
-docker run -d --name=base -e TZ=Asia/Shanghai snowdreamtech/base:debian
+docker pull snowdreamtech/redis:debian
+docker run -d --name=base -e TZ=Asia/Shanghai snowdreamtech/redis:debian
 
 # Or use docker-compose
 docker-compose up -d
@@ -40,7 +40,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:debian
+  snowdreamtech/redis:debian
 ```
 
 **Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x
@@ -56,7 +56,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:alpine
+  snowdreamtech/redis:alpine
 ```
 
 **Supported Architectures**: i386, amd64, arm32v6, arm32v7, arm64, ppc64le, riscv64, s390x
@@ -72,7 +72,7 @@ docker run -d \
   --name=base \
   -e TZ=Asia/Shanghai \
   --restart unless-stopped \
-  snowdreamtech/base:rocky
+  snowdreamtech/redis:rocky
 ```
 
 **Supported Architectures**: i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x
@@ -85,13 +85,13 @@ docker run -d \
 
 ```bash
 # Build Debian variant
-docker build -t snowdreamtech/base:debian ./docker/debian/
+docker build -t snowdreamtech/redis:debian ./docker/debian/
 
 # Build Alpine variant
-docker build -t snowdreamtech/base:alpine ./docker/alpine/
+docker build -t snowdreamtech/redis:alpine ./docker/alpine/
 
 # Build Rocky variant
-docker build -t snowdreamtech/base:rocky ./docker/rocky/
+docker build -t snowdreamtech/redis:rocky ./docker/rocky/
 ```
 
 ### Multi-Architecture Build
@@ -105,21 +105,21 @@ docker buildx create --use --name build --node build --driver-opt network=host
 # Build Debian for multiple architectures
 docker buildx build \
   --platform=linux/386,linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64,linux/mips64le,linux/ppc64le,linux/s390x \
-  -t snowdreamtech/base:debian \
+  -t snowdreamtech/redis:debian \
   ./docker/debian/ \
   --push
 
 # Build Alpine for multiple architectures
 docker buildx build \
   --platform=linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64,linux/ppc64le,linux/riscv64,linux/s390x \
-  -t snowdreamtech/base:alpine \
+  -t snowdreamtech/redis:alpine \
   ./docker/alpine/ \
   --push
 
 # Build Rocky for multiple architectures
 docker buildx build \
   --platform=linux/386,linux/amd64,linux/arm/v5,linux/arm/v7,linux/arm64,linux/mips64le,linux/ppc64le,linux/s390x \
-  -t snowdreamtech/base:rocky \
+  -t snowdreamtech/redis:rocky \
   ./docker/rocky/ \
   --push
 ```
@@ -140,6 +140,9 @@ All variants support the following environment variables for runtime configurati
 | `USER` | `root` | Username for custom user creation |
 | `WORKDIR` | `/root` | Working directory path |
 | `TZ` | - | Timezone (e.g., `Asia/Shanghai`, `America/New_York`) |
+| `REDIS_PASS` | - | Password for Redis authentication |
+| `DISALLOW_USER_LOGIN_REMOTELY` | `0` | Prevent remote user login (1=enabled, 0=disabled) |
+| `REDIS_PORT` | `6379` | Custom port for Redis server to listen on |
 
 **Debian-specific**:
 
@@ -156,7 +159,7 @@ docker build \
   --build-arg PUID=1000 \
   --build-arg PGID=1000 \
   --build-arg USER=appuser \
-  -t snowdreamtech/base:debian-custom \
+  -t snowdreamtech/redis:debian-custom \
   ./docker/debian/
 ```
 
@@ -168,7 +171,7 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e USER=appuser \
-  snowdreamtech/base:debian
+  snowdreamtech/redis:debian
 ```
 
 **Note**: User creation only occurs when `PUID≠0`, `PGID≠0`, and `USER≠root`.
@@ -180,7 +183,7 @@ docker run -d \
 ```yaml
 services:
   base:
-    image: snowdreamtech/base:debian
+    image: snowdreamtech/redis:debian
     container_name: base
     environment:
       - TZ=Asia/Shanghai
@@ -192,7 +195,7 @@ services:
 ```yaml
 services:
   base:
-    image: snowdreamtech/base:debian
+    image: snowdreamtech/redis:debian
     container_name: base
     environment:
       - TZ=Asia/Shanghai
@@ -209,9 +212,9 @@ Images follow semantic versioning with the format: `{major}.{minor}.{patch}-{var
 
 Examples:
 
-- `snowdreamtech/base:13.5.0-debian`
-- `snowdreamtech/base:3.24.0-alpine`
-- `snowdreamtech/base:10.2.0-rocky`
+- `snowdreamtech/redis:13.5.0-debian`
+- `snowdreamtech/redis:3.24.0-alpine`
+- `snowdreamtech/redis:10.2.0-rocky`
 
 This format allows:
 
@@ -247,7 +250,7 @@ The base template includes a flexible entrypoint system that executes custom ini
 Create custom initialization scripts in your derived Dockerfile:
 
 ```dockerfile
-FROM snowdreamtech/base:debian
+FROM snowdreamtech/redis:debian
 
 # Add your custom initialization script
 COPY my-init.sh /usr/local/bin/entrypoint.d/20-my-init.sh
@@ -263,7 +266,7 @@ CMD ["/app/start.sh"]
 Enable debug output to troubleshoot entrypoint execution:
 
 ```bash
-docker run -e DEBUG=true snowdreamtech/base:debian
+docker run -e DEBUG=true snowdreamtech/redis:debian
 ```
 
 Output example:
@@ -317,7 +320,7 @@ docker run --rm -e DEBUG=true base:debian
 5. [Faster Multi-Platform Builds: Dockerfile Cross-Compilation Guide](https://www.docker.com/blog/faster-multi-platform-builds-dockerfile-cross-compilation-guide/)
 6. [docker/buildx](https://github.com/docker/buildx)
 
-## Contact (备注：base)
+## Contact (备注：redis)
 
 * Email: <sn0wdr1am@qq.com>
 * QQ: 3217680847
