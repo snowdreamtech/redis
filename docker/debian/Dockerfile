@@ -17,21 +17,24 @@ ARG BUILDTIME \
     PGID=0 \
     PUID=0 \
     USER=root \
-    WORKDIR=/root
+    WORKDIR=/root \
+    REDIS_VERSION=5:8.0.2-3+deb13u2
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
+# x-release-please-start-version
+LABEL org.opencontainers.image.version="${VERSION:-8.0.2}"
+# x-release-please-end
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
-    org.opencontainers.image.title="Base Image Based On Debian" \
-    org.opencontainers.image.description="Docker Images for Base on Debian. (i386, amd64, arm32v5, arm32v7, arm64, mips64le, ppc64le, s390x)" \
-    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/base" \
-    org.opencontainers.image.base.name="snowdreamtech/base:debian" \
+    org.opencontainers.image.title="Redis Image Based On Debian" \
+    org.opencontainers.image.description="Docker Images for Redis on Debian. (386, amd64, arm/v5, arm/v7, arm64, riscv64, ppc64le, s390x)" \
+    org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/redis" \
+    org.opencontainers.image.base.name="snowdreamtech/debian:13.5.0" \
     org.opencontainers.image.licenses="MIT" \
-    org.opencontainers.image.source="https://github.com/snowdreamtech/base" \
+    org.opencontainers.image.source="https://github.com/snowdreamtech/redis" \
     org.opencontainers.image.vendor="Snowdream Tech" \
-    org.opencontainers.image.version="${VERSION:-13.5.0}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
-    org.opencontainers.image.url="https://github.com/snowdreamtech/base"
+    org.opencontainers.image.url="https://github.com/snowdreamtech/redis"
 
 # Runtime Environment Configuration
 ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
@@ -44,18 +47,25 @@ ENV DEBIAN_FRONTEND=${DEBIAN_FRONTEND} \
     PGID=${PGID} \
     PUID=${PUID} \
     USER=${USER} \
-    WORKDIR=${WORKDIR}
+    WORKDIR=${WORKDIR} \
+    REDIS_VERSION=${REDIS_VERSION} \
+    REDIS_CONFIG_PATH=/etc/redis/redis.conf \
+    REDIS_PORT=6379 \
+    REDIS_PASS="" \
+    DISALLOW_USER_LOGIN_REMOTELY=1
 
-# Additional tooling and configuration for Base image
+# Additional tooling and configuration for Redis image
 RUN set -eux \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy update \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy install --no-install-recommends \
-    vim \
+    redis-server=${REDIS_VERSION} \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy --purge autoremove \
     && DEBIAN_FRONTEND=noninteractive apt-get -qqy clean \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /tmp/* \
     && rm -rf /var/tmp/*
+
+EXPOSE 6379
 
 # Container Orchestration Files
 COPY entrypoint.d /usr/local/bin/entrypoint.d
