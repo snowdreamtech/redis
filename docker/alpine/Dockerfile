@@ -21,7 +21,7 @@ ARG BUILDTIME \
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
 # x-release-please-start-version
-LABEL org.opencontainers.image.version="${VERSION:-8.8.0}"
+LABEL org.opencontainers.image.version="${VERSION:-8.0.4}"
 # x-release-please-end
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.title="Redis Image Based On Alpine" \
