@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.0.4](https://github.com/snowdreamtech/redis/compare/rocky-v8.0.4...rocky-v8.0.4) (2026-06-23)
+
+
+### 🐛 Bug Fixes
+
+* **docker:** set default KEEPALIVE to 1 and override it in smoke tests ([04b2322](https://github.com/snowdreamtech/redis/commit/04b2322daf09e4caec7d7a25062a9be3fa3eabf8))
+
 ## [8.0.4](https://github.com/snowdreamtech/redis/compare/rocky-v8.0.4...rocky-v8.0.4) (2026-06-22)
 
 
