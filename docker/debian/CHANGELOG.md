@@ -27,13 +27,6 @@
 * sync debian build matrix and documentation with upstream ([0d6e613](https://github.com/snowdreamtech/redis/commit/0d6e6132c84a368f5b64b9144d9c7d3b7292d746))
 * update debian base image to 13.6.0 ([5f885d5](https://github.com/snowdreamtech/redis/commit/5f885d5a771f06d449533f2f3c619d27444822f5))
 
-## [8.0.2](https://github.com/snowdreamtech/redis/compare/debian-v8.0.2...debian-v8.0.2) (2026-06-23)
-
-
-### 🐛 Bug Fixes
-
-* **docker:** set default KEEPALIVE to 1 and override it in smoke tests ([04b2322](https://github.com/snowdreamtech/redis/commit/04b2322daf09e4caec7d7a25062a9be3fa3eabf8))
-
 ## [13.5.0](https://github.com/snowdreamtech/base/compare/debian-v13.5.0...debian-v13.5.0) (2026-06-20)
 
 
