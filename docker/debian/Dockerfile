@@ -1,7 +1,7 @@
 # Base Image (Debian Variant)
 # Extends snowdreamtech/debian with additional tooling and configuration.
 
-FROM snowdreamtech/debian:13.5.0
+FROM ghcr.io/snowdreamtech/debian:13.6.0
 
 # Build-time Configuration
 ARG BUILDTIME \
@@ -21,17 +21,15 @@ ARG BUILDTIME \
     REDIS_VERSION=5:8.0.2-3+deb13u2
 
 # Standard OCI Metadata (https://github.com/opencontainers/image-spec)
-# x-release-please-start-version
-LABEL org.opencontainers.image.version="${VERSION:-8.0.2}"
-# x-release-please-end
 LABEL org.opencontainers.image.authors="Snowdream Tech" \
     org.opencontainers.image.title="Redis Image Based On Debian" \
     org.opencontainers.image.description="Docker Images for Redis on Debian. (386, amd64, arm/v5, arm/v7, arm64, riscv64, ppc64le, s390x)" \
     org.opencontainers.image.documentation="https://hub.docker.com/r/snowdreamtech/redis" \
-    org.opencontainers.image.base.name="snowdreamtech/debian:13.5.0" \
+    org.opencontainers.image.base.name="ghcr.io/snowdreamtech/debian:13.6.0" \
     org.opencontainers.image.licenses="MIT" \
     org.opencontainers.image.source="https://github.com/snowdreamtech/redis" \
     org.opencontainers.image.vendor="Snowdream Tech" \
+    org.opencontainers.image.version="${VERSION}" \
     org.opencontainers.image.created="${BUILDTIME}" \
     org.opencontainers.image.revision="${REVISION}" \
     org.opencontainers.image.url="https://github.com/snowdreamtech/redis"
